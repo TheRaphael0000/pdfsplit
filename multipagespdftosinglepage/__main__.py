@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import copy
-import sys
 from PyPDF2 import PdfFileWriter, PdfFileReader
 
 import argparse
@@ -10,16 +9,20 @@ import argparse
 def main():
     parser = argparse.ArgumentParser(
         description="Slice every pages of a pdf to a single page in the same PDF")
-    parser.add_argument('-r', '--rows', type=int, default=2, description="Number of rows")
-    parser.add_argument('-c', '--cols', type=int, default=2,
-                        description="Number of colunms")
+    parser.add_argument("input", help="Input file")
+    parser.add_argument(
+        "output", help="Output file (doesn't work with the same as input file)")
+    parser.add_argument('-r', '--rows', type=int,
+                        default=2, help="Number of rows")
+    parser.add_argument('-c', '--cols', type=int,
+                        default=2, help="Number of colunms")
 
     args = parser.parse_args()
 
     rows = args.rows
     cols = args.cols
 
-    input = PdfFileReader(open(sys.argv[1], 'rb'))
+    input = PdfFileReader(open(args.input, 'rb'))
     output = PdfFileWriter()
 
     for page_i in range(input.getNumPages()):
@@ -43,7 +46,7 @@ def main():
 
                 output.addPage(c)
 
-    output.write(open(sys.argv[2], 'wb'))
+    output.write(open(args.output, 'wb'))
 
 
 if __name__ == '__main__':

@@ -12,3 +12,9 @@ pip install . --user
 ```
 multipagespdftosinglepage --help
 ```
+
+# TODO
+
+```
+- [ ] Remove margins 
+```
