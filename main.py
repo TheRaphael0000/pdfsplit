@@ -4,35 +4,32 @@ import copy
 import sys
 from PyPDF2 import PdfFileWriter, PdfFileReader
 
+
+rows = 2
+cols = 2
+
 input = PdfFileReader(open(sys.argv[1], 'rb'))
 output = PdfFileWriter()
 
-pages = [input.getPage(i) for i in range(0, input.getNumPages())]
+for page_i in range(input.getNumPages()):
+    page = input.getPage(page_i)
+    (w, h) = page.mediaBox.upperRight
 
-for p in pages:
-    a = copy.copy(p)
-    b = copy.copy(p)
-    c = copy.copy(p)
-    d = copy.copy(p)
+    col_w = w/cols
+    row_h = h/rows
 
-    (w, h) = p.mediaBox.upperRight
+    for subpage_i in range(rows):
+        x = subpage_i * col_w
+        for subpage_j in range(cols)[::-1]:
+            y = subpage_j * row_h
+            c = copy.copy(page)
+            c.mediaBox = copy.copy(c.mediaBox)
 
-    a.mediaBox.upperLeft = (0, h/2)
-    a.mediaBox.lowerRight = (w/2, h)
-    output.addPage(a)
+            ll = (x, y)
+            c.mediaBox.setLowerLeft(ll)
+            ur = (x+col_w, y+row_h)
+            c.mediaBox.setUpperRight(ur)
 
-    b.mediaBox.upperLeft = (w/2, h/2)
-    b.mediaBox.lowerRight = (w, h)
-    output.addPage(b)
+            output.addPage(c)
 
-    c.mediaBox.upperLeft = (0, 0)
-    c.mediaBox.lowerRight = (w/2, h/2)
-    output.addPage(c)
-
-    d.mediaBox.upperLeft = (w/2, 0)
-    d.mediaBox.lowerRight = (w, h/2)
-    output.addPage(d)
-
-
-g = open(sys.argv[2], 'wb')
-output.write(g)
+output.write(open(sys.argv[2], 'wb'))
