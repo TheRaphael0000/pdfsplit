@@ -17,24 +17,22 @@ for p in pages:
 
     (w, h) = p.mediaBox.upperRight
 
-    center = (w / 2, h / 2)
-
-    a.mediaBox.upperLeft = (0, 0)
-    a.mediaBox.lowerRight = center
-
-    b.mediaBox.upperRight = (w, 0)
-    b.mediaBox.lowerLeft = center
-
-    c.mediaBox.lowerLeft = (0, h)
-    c.mediaBox.upperRight = center
-
-    d.mediaBox.upperLeft = center
-    d.mediaBox.lowerRight = (w, h)
-
+    a.mediaBox.upperLeft = (0, h/2)
+    a.mediaBox.lowerRight = (w/2, h)
     output.addPage(a)
-    output.addPage(b)
-    output.addPage(c)
+
+    b.mediaBox.upperLeft = (w/2, h/2)
+    b.mediaBox.lowerRight = (w, h)
     output.addPage(d)
+
+    c.mediaBox.upperLeft = (0, 0)
+    c.mediaBox.lowerRight = (w/2, h/2)
+    output.addPage(c)
+
+    d.mediaBox.upperLeft = (w/2, 0)
+    d.mediaBox.lowerRight = (w, h/2)
+    output.addPage(d)
+
 
 g = open(sys.argv[2], 'wb')
 output.write(g)
