@@ -23,7 +23,7 @@ for p in pages:
 
     b.mediaBox.upperLeft = (w/2, h/2)
     b.mediaBox.lowerRight = (w, h)
-    output.addPage(d)
+    output.addPage(b)
 
     c.mediaBox.upperLeft = (0, 0)
     c.mediaBox.lowerRight = (w/2, h/2)
