@@ -16,12 +16,13 @@ setup(
     license="",
     keywords="",
     url="https://github.com/TheRaphael0000/MultiPagesPdfToSinglePage",
-    packages=['multipagespdftosinglepage'],
-    long_description=read('README.md'),
+    packages=["multipagespdftosinglepage"],
+    long_description=read("README.md"),
     classifiers=[],
+    install_requires=read("requirements.txt"),
     entry_points={
-        'console_scripts': [
-            'multipagespdftosinglepage=multipagespdftosinglepage.__main__:main'
+        "console_scripts": [
+            "multipagespdftosinglepage=multipagespdftosinglepage.__main__:main"
         ]
     },
 )
