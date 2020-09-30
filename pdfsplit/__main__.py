@@ -4,32 +4,19 @@ import argparse
 from .spliter import split, create_pdf
 
 
-def valid_read_order(o):
-    possible = [
-        "tblr", "tbrl", "btrl", "btlr",
-        "lrtb", "rltb", "rlbt", "lrbt",
-    ]
-
-    if o not in possible:
-        return False
-    return o
-
-
 def main():
     parser = argparse.ArgumentParser(
-        description="Slice every pages of a pdf to a single page in the same PDF")
+        description="Slice into a grid every pages of a pdf and create a new pdf with every cells of the grid")
     parser.add_argument("input", help="Input file")
-    parser.add_argument(
-        "output", help="Output file (doesn't work with the same as input file)")
-    parser.add_argument("-r", "--rows", type=int,
-                        default=2, help="Number of rows")
-    parser.add_argument("-c", "--cols", type=int,
-                        default=2, help="Number of colunms")
-    parser.add_argument("-o", "--order", type=valid_read_order,
-                        default="tblr", help="Reading order : By default Top-Bottom then Left-Right")
+    parser.add_argument("output", help="Output file (doesn't work with the same as input file)")
+    parser.add_argument("-r", "--rows", type=int, default=1, help="Number of rows")
+    parser.add_argument("-c", "--cols", type=int, default=1, help="Number of colunms")
+    parser.add_argument("-x", "--xflip", action="store_true", help="Horizontal flip of the reading grid direction (default: left to right)")
+    parser.add_argument("-y", "--yflip", action="store_true", help="Vertical flip of the reading grid direction (default: up to bottom)")
+    parser.add_argument("-t", "--transpose", action="store_true", help="Transpose the way of reading the grid (default: horizontal then vertical)")
 
     args = parser.parse_args()
-    pages = split(args.input, args.rows, args.cols, args.order)
+    pages = split(args.input, args.rows, args.cols, args.xflip, args.yflip, args.transpose)
     pdf = create_pdf(pages)
     pdf.write(open(args.output, "wb"))
 

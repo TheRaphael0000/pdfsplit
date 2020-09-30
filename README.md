@@ -1,16 +1,16 @@
 # Install
 
 ```
-git clone https://github.com/TheRaphael0000/splitpdf
-cd splitpdf
+git clone https://github.com/TheRaphael0000/pdfsplit
+cd pdfsplit
 pip install . --user
-#pip install -e . --user #for devs
+# pip install -e . --user #for devs
 ```
 
 # Use
 
 ```
-splitpdf --help
+pdfsplit --help
 ```
 
 # TODO

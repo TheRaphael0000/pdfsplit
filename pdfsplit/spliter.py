@@ -1,18 +1,8 @@
 import copy
+import itertools
+
+import numpy as np
 from PyPDF2 import PdfFileWriter, PdfFileReader
-
-
-def order_to_index(rows, cols, order):
-    swap_xy = "l" == order[0] or "l" == order[1]
-    if swap_xy:
-        x = order[0:2]
-        y = order[2:4]
-    else:
-        x = order[2:4]
-        y = order[0:2]
-    x_order = 1 if x[0] == "l" else -1
-    y_order = 1 if y[0] == "t" else -1
-    return swap_xy, x_order, y_order
 
 
 def create_pdf(pages):
@@ -22,39 +12,41 @@ def create_pdf(pages):
     return output
 
 
-def split(filename, rows, cols, order):
-    input = PdfFileReader(open(filename, "rb"))
+def split(filename, rows, cols, xflip, yflip, transpose):
+    input = PdfFileReader(open(filename, "rb"), strict=False)
+
     pages = []
-
-    swap_xy, x_order, y_order = order_to_index(rows, cols, order)
-
-    def crop_add_page(subpage_i, subpage_j):
-        x = subpage_i * col_w
-        y = subpage_j * row_h
-        page_copy = copy.copy(page)
-        page_copy.mediaBox = copy.copy(page_copy.mediaBox)
-
-        ll = (x, y)
-        page_copy.mediaBox.setLowerLeft(ll)
-        ur = (x+col_w, y+row_h)
-        page_copy.mediaBox.setUpperRight(ur)
-
-        pages.append(page_copy)
 
     for page_i in range(input.getNumPages()):
         page = input.getPage(page_i)
         (w, h) = page.mediaBox.upperRight
+        col_w = w / cols
+        row_h = h / rows
 
-        col_w = w/cols
-        row_h = h/rows
+        sub_pages = []
+        for r, c in itertools.product(range(rows), range(cols)):
+            # inverse v-axis because the origin is bottom left
+            r_pos = (rows - r - 1) * row_h
+            c_pos = c * col_w
 
-        if swap_xy:
-            for subpage_i in range(rows)[::x_order]:
-                for subpage_j in range(cols)[::-y_order]:
-                    crop_add_page(subpage_i, subpage_j)
-        else:
-            for subpage_j in range(cols)[::-y_order]:
-                for subpage_i in range(rows)[::x_order]:
-                    crop_add_page(subpage_i, subpage_j)
+            sub_page = copy.copy(page)
+            sub_page.mediaBox = copy.copy(sub_page.mediaBox)
+            sub_page.mediaBox.setLowerLeft((c_pos, r_pos))
+            sub_page.mediaBox.setUpperRight((c_pos + col_w, r_pos + row_h))
+
+            sub_pages.append(sub_page)
+
+        order = np.arange(rows * cols).reshape((cols, rows))
+        if transpose:
+            order = order.T
+        if xflip:
+            order = order[::-1, ::]
+        if yflip:
+            order = order[::, ::-1]
+        order = order.flatten()
+
+        sub_pages = [sub_pages[i] for i in order]
+
+        pages.extend(sub_pages)
 
     return pages
