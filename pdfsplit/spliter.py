@@ -33,7 +33,6 @@ def split(filename, rows, cols, xflip, yflip, transpose):
     print("Reading order of the sub pages : ")
     print(order)
     order = order.flatten()
-    print(order)
 
     for page_i in range(input.getNumPages()):
         page = input.getPage(page_i)
