@@ -8,21 +8,21 @@ def read(fname):
 
 
 setup(
-    name="multipagespdftosinglepage",
+    name="splitpdf",
     version="0.0.1",
     author="Raphaël Margueron",
     author_email="raphael.margueron@gmail.com",
     description=(""),
     license="",
     keywords="",
-    url="https://github.com/TheRaphael0000/MultiPagesPdfToSinglePage",
-    packages=["multipagespdftosinglepage"],
+    url="https://github.com/TheRaphael0000/splitpdf",
+    packages=["splitpdf"],
     long_description=read("README.md"),
     classifiers=[],
     install_requires=read("requirements.txt"),
     entry_points={
         "console_scripts": [
-            "multipagespdftosinglepage=multipagespdftosinglepage.__main__:main"
+            "pdfsplit=splitpdf.__main__:main"
         ]
     },
 )

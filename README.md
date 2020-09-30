@@ -1,8 +1,8 @@
 # Install
 
 ```
-git clone https://github.com/TheRaphael0000/MultiPagesPdfToSinglePage
-cd MultiPagesPdfToSinglePage
+git clone https://github.com/TheRaphael0000/splitpdf
+cd splitpdf
 pip install . --user
 #pip install -e . --user #for devs
 ```
@@ -10,11 +10,11 @@ pip install . --user
 # Use
 
 ```
-multipagespdftosinglepage --help
+splitpdf --help
 ```
 
 # TODO
 
 ```
-- [ ] Remove margins 
+- [ ] Remove margins
 ```
