@@ -17,6 +17,24 @@ def split(filename, rows, cols, xflip, yflip, transpose):
 
     pages = []
 
+    order = np.arange(rows * cols)
+
+    if transpose:
+        order = order.reshape((cols, rows))
+        order = order.T
+    else:
+        order = order.reshape((rows, cols))
+
+    if xflip:
+        order = order[::, ::-1]
+    if yflip:
+        order = order[::-1, ::]
+
+    print("Reading order of the sub pages : ")
+    print(order)
+    order = order.flatten()
+    print(order)
+
     for page_i in range(input.getNumPages()):
         page = input.getPage(page_i)
         (w, h) = page.mediaBox.upperRight
@@ -35,15 +53,6 @@ def split(filename, rows, cols, xflip, yflip, transpose):
             sub_page.mediaBox.setUpperRight((c_pos + col_w, r_pos + row_h))
 
             sub_pages.append(sub_page)
-
-        order = np.arange(rows * cols).reshape((cols, rows))
-        if transpose:
-            order = order.T
-        if xflip:
-            order = order[::-1, ::]
-        if yflip:
-            order = order[::, ::-1]
-        order = order.flatten()
 
         sub_pages = [sub_pages[i] for i in order]
 
