@@ -12,6 +12,17 @@ def create_pdf(pages):
     return output
 
 
+def booklet_reordering(pages):
+    pages = list(pages)
+    l = len(pages)
+    assert l % 2 == 0
+    even = list(pages[0::2])
+    odd = list(pages[1::2])
+
+    pages_out = even + odd[::-1]
+    return pages_out
+
+
 def split(filename, rows, cols, xflip, yflip, transpose):
     input = PdfFileReader(open(filename, "rb"), strict=False)
 
