@@ -19,7 +19,15 @@ def booklet_reordering(pages):
     even = list(pages[0::2])
     odd = list(pages[1::2])
 
-    pages_out = even + odd[::-1]
+    pages_out = odd + even[::-1]
+
+    for i, page in enumerate(pages_out):
+        if i % 2 == 1:
+            page.rotateCounterClockwise(180)
+
+    for page in pages_out[len(pages_out)//2:]:
+        page.rotateCounterClockwise(180)
+
     return pages_out
 
 
